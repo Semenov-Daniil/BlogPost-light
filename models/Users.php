@@ -22,6 +22,7 @@ use Yii;
  * @property string|null $avatar
  * @property string $registered_at
  *
+ * @property Posts[] $posts
  * @property Roles $roles
  */
 class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
@@ -103,6 +104,21 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function getRoles()
     {
         return $this->hasOne(Roles::class, ['id' => 'roles_id']);
+    }
+
+    /**
+     * Gets query for [[Posts]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPosts()
+    {
+        return $this->hasMany(Posts::class, ['users_id' => 'id']);
+    }
+
+    public function getIsAuthor(): bool
+    {
+        return $this->roles_id == Roles::getRole('author');
     }
 
     /**

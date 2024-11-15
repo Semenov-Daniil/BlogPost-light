@@ -41,6 +41,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'items' => [
             ['label' => 'Главная', 'url' => ['/site/index']],
             ['label' => 'О нас', 'url' => ['/site/about']],
+            ['label' => 'Посты', 'url' => ['/post/index']],
             Yii::$app->user->isGuest
                 ? ['label' => 'Регистрация', 'url' => ['/site/register']]
                 : '',
@@ -53,7 +54,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                         ['class' => 'nav-link btn btn-link logout']
                     )
                     . Html::endForm()
-                    . '</li>'
+                    . '</li>',
+            !Yii::$app->user->isGuest && Yii::$app->user->identity->isAuthor
+                ? Html::a('Создать пост', ['/post/create'], ['class' => 'btn btn-success'])
+                : '',
         ]
     ]);
     NavBar::end();
