@@ -53,6 +53,11 @@ $config = [
             ],
         ],
         
+        'formatter' => [
+            'datetimeFormat' => 'dd.MM.yyyy HH:mm',
+            'locale' => 'ru-RU',
+            'language' => 'ru-RU',
+       ],
     ],
     'params' => $params,
 ];

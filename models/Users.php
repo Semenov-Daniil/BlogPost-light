@@ -121,6 +121,11 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->roles_id == Roles::getRole('author');
     }
 
+    public function getIsAdmin(): bool
+    {
+        return $this->roles_id == Roles::getRole('admin');
+    }
+
     /**
      * Finds an identity by the given ID.
      *
