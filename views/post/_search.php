@@ -13,33 +13,19 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
+        'options' => [
+            'class' => 'd-flex gap-3 flex-wrap',
+            'data' => ['pjax' => true]
+        ]
     ]); ?>
-
-    <?= $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'preview') ?>
+    <?= $form->field($model, 'themes_id')->dropDownList($themes, ['prompt' => 'Выбрать тему', 'style' => 'width: 13rem;']) ?>
 
-    <?= $form->field($model, 'text') ?>
-
-    <?= $form->field($model, 'users_id') ?>
-
-    <?php // echo $form->field($model, 'themes_id') ?>
-
-    <?php // echo $form->field($model, 'statuses_id') ?>
-
-    <?php // echo $form->field($model, 'image') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'like') ?>
-
-    <?php // echo $form->field($model, 'dislike') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+    <div class="form-group d-flex gap-3 align-items-end">
+        <?// Html::submitButton('Поиск', ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Сброс', ['index'], ['class' => 'btn btn-outline-secondary', 'data' => ['pjax' => '0']]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

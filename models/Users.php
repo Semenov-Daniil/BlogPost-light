@@ -107,6 +107,16 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
 
     /**
+     * Gets query for [[Comments]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComments()
+    {
+        return $this->hasMany(Comments::class, ['users_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Posts]].
      *
      * @return \yii\db\ActiveQuery

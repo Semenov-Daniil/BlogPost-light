@@ -40,7 +40,8 @@ class PostSearch extends Posts
      */
     public function search($params)
     {
-        $query = Posts::find();
+        $query = Posts::find()
+            ->where(['statuses_id' => Statuses::getStatus('Одобрен')]);
 
         // add conditions that should always apply here
 
@@ -48,6 +49,11 @@ class PostSearch extends Posts
             'query' => $query,
             'pagination' => [
                 'pageSize' => 20,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'created_at' => SORT_DESC,
+                ]
             ],
         ]);
 

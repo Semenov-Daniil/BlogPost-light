@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "posts".
@@ -108,6 +109,16 @@ class Posts extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Comments]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComments()
+    {
+        return $this->hasMany(Comments::class, ['posts_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Statuses]].
      *
      * @return \yii\db\ActiveQuery
@@ -159,5 +170,25 @@ class Posts extends \yii\db\ActiveRecord
     {
         $this->image = 'uploads/posts/'  . Yii::$app->security->generateRandomString() . '_' . time() . '.' . $this->uploadFile->extension;
         return $this->uploadFile->saveAs($this->image);
+    }
+
+    public static function getPostsLast($limit)
+    {
+        return new ActiveDataProvider([
+            'query' => self::find()
+                ->where(['statuses_id' => Statuses::getStatus('Одобрен')])
+                ->orderBy(['created_at' => SORT_DESC])
+                ->limit($limit),
+        ]);
+    }
+
+    public function getCommentsList()
+    {
+        // return new ActiveDataProvider([
+        //     'query' => self::find()
+        //         ->where(['statuses_id' => Statuses::getStatus('Одобрен')])
+        //         ->orderBy(['created_at' => SORT_DESC])
+        //         ->limit($limit),
+        // ]);
     }
 }

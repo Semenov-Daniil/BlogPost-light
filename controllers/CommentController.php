@@ -4,18 +4,15 @@ namespace app\controllers;
 
 use app\models\Comments;
 use app\models\Posts;
-use app\models\PostSearch;
-use app\models\Themes;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\helpers\VarDumper;
-use yii\web\UploadedFile;
 
 /**
- * PostController implements the CRUD actions for Posts model.
+ * CommentController implements the CRUD actions for Comments model.
  */
-class PostController extends Controller
+class CommentController extends Controller
 {
     /**
      * @inheritDoc
@@ -36,100 +33,73 @@ class PostController extends Controller
     }
 
     /**
-     * Lists all Posts models.
+     * Lists all Comments models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new PostSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Comments::find(),
+            /*
+            'pagination' => [
+                'pageSize' => 50
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+            */
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'themes' => Themes::getThemes(),
         ]);
     }
 
     /**
-     * Displays a single Posts model.
+     * Displays a single Comments model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        $post = $this->findModel($id);
-        $comment = new Comments();
-        $commentsList = Comments::getCommentsList($id);
-
-        if ($this->request->isAjax) {
-            
-        }
-
         return $this->render('view', [
             'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Creates a new Comments model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return string|\yii\web\Response
+     */
+    public function actionCreate($postId, $answerId = null)
+    {
+        $post = Posts::findOne(['id' => $postId]);
+        $comment = new Comments();
+        $commentsList = Comments::getCommentsList($postId);
+
+        
+        if ($this->request->isAjax) {
+            if ($comment->load($this->request->post()) && $comment->create($postId, $answerId)) {
+                $comment->text = '';
+            }
+        } else {
+            $comment->loadDefaultValues();
+        }
+
+        return $this->renderAjax('/post/view', [
+            'model' => $post,
             'comment' => $comment,
             'commentsList' => $commentsList
         ]);
     }
 
     /**
-     * Displays a single Posts model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionReaction($postId, $reaction)
-    {
-        if ($model = Posts::findOne(['id' => $postId])) {
-            $result = 0;
-            switch ($reaction) {
-                case 1:
-                    $model->like++;
-                    $result = $model->like;
-                    break;
-                case 0:
-                    $model->dislike++;
-                    $result = $model->dislike;
-            }
-
-            $model->save();
-
-            return $result;
-        }
-    }
-
-    /**
-     * Creates a new Posts model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
-    {
-        $model = new Posts();
-
-        if ($this->request->isAjax) {
-            if ($model->load($this->request->post())) {
-                $model->uploadFile = UploadedFile::getInstance($model, 'uploadFile');
-
-                if ($model->create()) {
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-            'themes' => Themes::getThemes(),
-        ]);
-    }
-
-    /**
-     * Updates an existing Posts model.
+     * Updates an existing Comments model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -149,7 +119,7 @@ class PostController extends Controller
     }
 
     /**
-     * Deletes an existing Posts model.
+     * Deletes an existing Comments model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -163,15 +133,15 @@ class PostController extends Controller
     }
 
     /**
-     * Finds the Posts model based on its primary key value.
+     * Finds the Comments model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Posts the loaded model
+     * @return Comments the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Posts::findOne(['id' => $id])) !== null) {
+        if (($model = Comments::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

@@ -1,7 +1,5 @@
 <?php
 
-
-
 /** @var yii\web\View $this */
 
 use yii\bootstrap5\Html;
@@ -12,7 +10,7 @@ use yii\bootstrap5\Html;
 <div class="post">
     <div class="card">
         <?php if ($model->image): ?>
-            <img src="/<?= $model->image ?>" class="card-img-top" alt="Изображение поста" style="height: 30rem; width: auto; object-fit: contain;">
+            <img src="/<?= $model->image ?>" class="card-img-top object-fit-cover" alt="Изображение поста" style="height: 30rem;">
         <?php endif; ?>
         <div class="card-body">
             <h5 class="card-title"><?= $model->title ?></h5>
