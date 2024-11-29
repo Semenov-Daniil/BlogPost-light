@@ -136,6 +136,22 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->roles_id == Roles::getRole('admin');
     }
 
+    public static function getBlocks(): array
+    {
+        return [
+            0 => 'Активные',
+            1 => 'Заблокированные'
+        ];
+    }
+
+    public static function getBlocksStyle(): array
+    {
+        return [
+            0 => 'text-bg-success',
+            1 => 'text-bg-danger'
+        ];
+    }
+
     /**
      * Finds an identity by the given ID.
      *

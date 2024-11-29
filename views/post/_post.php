@@ -17,12 +17,12 @@ use yii\bootstrap5\Html;
             <h6 class="card-subtitle mb-2 text-body-secondary"><?= $model->themes->title ?> | <?= $model->users->login ?> | <?= Yii::$app->formatter->asDatetime($model->created_at) ?></h6>
             <p class="card-text"><?= $model->preview ?></p>
             <div>
-                <?= Html::a('Читать', ['post/view', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Читать', ['/post/view', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
                 <? if (!Yii::$app->user->isGuest && Yii::$app->user->identity->id == $model->users_id): ?>
-                    <?= Html::a('Редактировать', ['post/view', 'id' => $model->id], ['class' => 'btn btn-info']) ?>
+                    <?= Html::a('Редактировать', ['post/update', 'id' => $model->id], ['class' => 'btn btn-info']) ?>
                 <? endif; ?>
                 <? if (!Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin): ?>
-                    <?= Html::a('Удалить', ['post/delete', 'id' => $model->id], ['class' => 'btn btn-danger']) ?>
+                    <?= Html::a('Удалить', ['/post/delete', 'id' => $model->id], ['class' => 'btn btn-danger']) ?>
                 <? endif; ?>
             </div>
         </div>

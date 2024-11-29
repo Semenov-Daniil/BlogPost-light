@@ -57,7 +57,18 @@ $config = [
             'datetimeFormat' => 'dd.MM.yyyy HH:mm',
             'locale' => 'ru-RU',
             'language' => 'ru-RU',
+            'timeZone' => 'GMT'
        ],
+    ],
+    'modules' => [
+        'account' => [
+            'class' => 'app\modules\account\Module',
+            'defaultRoute' => 'post'
+        ],
+        'panel-admin' => [
+            'class' => 'app\modules\admin\Module',
+            'defaultRoute' => 'post'
+        ],
     ],
     'params' => $params,
 ];

@@ -37,6 +37,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
     ]);
     echo Nav::widget([
+        'route' => Yii::$app->getRequest()->pathInfo,
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Главная', 'url' => ['/site/index']],
@@ -44,6 +45,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Посты', 'url' => ['/post/index']],
             Yii::$app->user->isGuest
                 ? ['label' => 'Регистрация', 'url' => ['/site/register']]
+                : '',
+            !Yii::$app->user->isGuest && Yii::$app->user->identity->isAuthor
+                ? ['label' => 'Личный кабинет', 'url' => ['/account']]
+                : '',
+            !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin
+                ? ['label' => 'Панель администратора', 'url' => ['/panel-admin']]
                 : '',
             Yii::$app->user->isGuest
                 ? ['label' => 'Вход', 'url' => ['/site/login']]

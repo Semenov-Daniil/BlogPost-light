@@ -40,6 +40,19 @@ class Posts extends \yii\db\ActiveRecord
         return true;
     }
 
+    public function beforeDelete()
+    {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
+
+        if ($this->image) {
+            unlink($this->image);
+        }
+        
+        return true;
+    }
+
     public $uploadFile;
     public bool $check = false;
     public string $theme = '';
@@ -166,8 +179,32 @@ class Posts extends \yii\db\ActiveRecord
         return false;
     }
 
+    public function updatePost()
+    {
+        if ($this->validate()) {
+            if (is_null($this->uploadFile) || $this->upload()) {
+                if ($this->check) {
+                    $themes = new Themes();
+                    $themes->title =  $this->theme;
+                    $themes->save();
+                    $this->themes_id = $themes->id;
+                }
+
+                $this->statuses_id = Statuses::getStatus('Редактирование');
+
+                return $this->save(false);
+            }
+        }
+        
+        return false;
+    }
+
     public function upload()
     {
+        if ($this->image) {
+            unlink($this->image);
+        }
+
         $this->image = 'uploads/posts/'  . Yii::$app->security->generateRandomString() . '_' . time() . '.' . $this->uploadFile->extension;
         return $this->uploadFile->saveAs($this->image);
     }

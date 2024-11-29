@@ -139,12 +139,19 @@ class PostController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isAjax) {
+            if ($model->load($this->request->post())) {
+                $model->uploadFile = UploadedFile::getInstance($model, 'uploadFile');
+
+                if ($model->updatePost()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
+            'themes' => Themes::getThemes(),
         ]);
     }
 
@@ -159,7 +166,7 @@ class PostController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->goBack();
     }
 
     /**

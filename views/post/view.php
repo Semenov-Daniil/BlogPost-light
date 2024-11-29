@@ -35,11 +35,11 @@ $this->registerJsFile('js/reaction.js', ['depends' => YiiAsset::class])
                     <? if (!Yii::$app->user->isGuest && Yii::$app->user->identity->id == $model->users_id): ?>
                         <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-info']) ?>
                     <? endif; ?>
-                    <? if (!Yii::$app->user->isGuest && (Yii::$app->user->identity->isAdmin || Yii::$app->user->identity->id == $model->users_id)): ?>
+                    <? if (!Yii::$app->user->isGuest && (Yii::$app->user->identity->isAdmin || (Yii::$app->user->identity->id == $model->users_id && $commentsList->getCount() == 0))): ?>
                         <?= Html::button('Удалить', ['class' => 'btn btn-danger', 'data-bs-toggle' => "modal", 'data-bs-target' => "#deleteModal"]) ?>
                     <? endif; ?>
                 </div>
-                <div class="reaction">
+                <div class="reaction mt-4">
                     <?= Html::a("👍 <span class='count-reaction'>$model->like</span>", ['reaction', 'postId' => $model->id, 'reaction' => 1], ['class' => 'text-decoration-none btn-reaction']) ?>
                     <?= Html::a("👎 <span class='count-reaction'>$model->dislike</span>", ['reaction', 'postId' => $model->id, 'reaction' => 0], ['class' => 'text-decoration-none btn-reaction']) ?>
                 </div>
