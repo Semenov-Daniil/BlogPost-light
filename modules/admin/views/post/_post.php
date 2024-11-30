@@ -3,9 +3,13 @@
 /** @var yii\web\View $this */
 
 use yii\bootstrap5\Html;
+use yii\bootstrap5\Modal;
+use yii\web\YiiAsset;
 
 /** @var app\models\Posts $model */
 /** @var array $statusesStyle */
+
+$this->registerJsFile('js/cancelModal.js', ['depends' => YiiAsset::class]);
 
 ?>
 <div class="post">
@@ -28,7 +32,21 @@ use yii\bootstrap5\Html;
                 <? if (!Yii::$app->user->isGuest): ?>
                     <?= Html::a('Удалить', ['/post/delete', 'id' => $model->id], ['class' => 'btn btn-danger', 'data' => ['method' => 'post']]) ?>
                 <? endif; ?>
+                <? if (!Yii::$app->user->isGuest): ?>
+                    <?= Html::a('Удалить (modal)', ['cancel-modal', 'id' => $model->id], ['class' => 'btn btn-danger btn-cancel-modal', 'data' => ['pjax' => true]]) ?>
+                <? endif; ?>
             </div>
         </div>
     </div>
 </div>
+
+<?php
+
+Modal::begin([
+    'id' => 'cancel-modal',
+    'title' => 'Hello world',
+]);
+
+echo 'Say hello...';
+
+Modal::end();

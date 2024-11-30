@@ -31,7 +31,7 @@ use yii\bootstrap5\ActiveForm;
 
 
     <div class="form-group d-flex gap-3 align-items-end">
-        <?= Html::a('Сброс', ['/panel-admin/user'], ['class' => 'btn btn-outline-secondary', 'data' => ['pjax' => true]]) ?>
+        <?= Html::a('Сброс', ['/panel-admin/user'], ['class' => 'btn btn-outline-secondary btn-reset', 'data' => ['pjax' => 0]]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

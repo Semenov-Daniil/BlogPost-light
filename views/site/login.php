@@ -5,8 +5,10 @@
 
 /** @var app\models\LoginForm $model */
 
+use app\widgets\Alert;
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
+use yii\helpers\VarDumper;
 use yii\widgets\Pjax;
 
 $this->title = 'Вход';
@@ -16,13 +18,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3><?= Html::encode($this->title) ?></h3>
 
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-6">
 
             <?php Pjax::begin([
                 'id' => 'pjax-login-form',
                 'enablePushState' => false,
                 'timeout' => 10000,
             ]); ?>
+                <?php if (Yii::$app->session->hasFlash('block-user')) {
+                    Yii::$app->session->setFlash('error', Yii::$app->session->getFlash('block-user'));
+                    Yii::$app->session->removeFlash('block-user');
+                } ?>
+
+                <?=  Alert::widget(); ?>
+
                 <?php $form = ActiveForm::begin([
                     'id' => 'login-form',
                     'fieldConfig' => [

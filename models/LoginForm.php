@@ -65,7 +65,15 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser());
+            $user = $this->getUser();
+
+            $user->isBlock();
+
+            if (!$user->is_block) {
+                return Yii::$app->user->login($this->getUser());
+            } else {
+                Yii::$app->session->setFlash('block-user', 'Вы заблокированы' . ($user->block_time ? ' до ' . Yii::$app->formatter->asDatetime($user->block_time) : ' навсегда'));
+            }
         }
         return false;
     }

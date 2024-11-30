@@ -73,6 +73,17 @@ $(() => {
         })
     });
 
+    $('#pjax-users').on('click', '.btn-reset', function(event) {
+        event.preventDefault();
+
+        $.pjax.reload({
+            container: '#pjax-users',
+            url: $(this).attr('href'),
+            pushState: false,
+            timeout: 5000,
+        });
+    });
+
     selectResize();
 
     $('#pjax-users').on('pjax:complete', function(event) {

@@ -220,4 +220,22 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return Yii::$app->getSecurity()->validatePassword($password, $this->password);
     }
+
+    public function unblock()
+    {
+        $this->is_block = 0;
+        $this->block_time = null;
+        $this->save(false);
+    }
+
+    public function isBlock()
+    {
+        if ($this->is_block) {
+            if ($this->block_time) {
+                if (strtotime($this->block_time) < time()) {
+                    $this->unblock();
+                }
+            }
+        }
+    }
 }
